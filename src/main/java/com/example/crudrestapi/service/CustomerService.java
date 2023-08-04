@@ -1,15 +1,16 @@
 package com.example.crudrestapi.service;
 
+import com.example.crudrestapi.dto.CustomerDto;
 import com.example.crudrestapi.model.Customer;
 
 import java.util.List;
 import java.util.Optional;
 
 public interface CustomerService {
-    Customer createCustomer(Customer customer);
-    Optional<Customer> getCustomerById(Long id);
-    List<Customer> getAllCustomers();
-    Customer updateCustomer(Customer customer);
+    CustomerDto createCustomer(CustomerDto customer);
+    CustomerDto getCustomerById(Long id);
+    List<CustomerDto> getAllCustomers();
+    CustomerDto updateCustomer(CustomerDto customerDto);
 
     void deleteCustomer(Long id);
 }

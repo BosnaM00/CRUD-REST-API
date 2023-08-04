@@ -1,5 +1,6 @@
 package com.example.crudrestapi.controller;
 
+import com.example.crudrestapi.dto.CustomerDto;
 import com.example.crudrestapi.model.Customer;
 import com.example.crudrestapi.service.CustomerServiceImpl;
 import lombok.AllArgsConstructor;
@@ -17,23 +18,23 @@ public class CustomerController {
     private CustomerServiceImpl customerService;
 
     @PostMapping
-    public ResponseEntity<Customer> createCustomer(@RequestBody Customer customer){
-        return new ResponseEntity<>(customerService.createCustomer(customer), HttpStatus.CREATED);
+    public ResponseEntity<CustomerDto> createCustomer(@RequestBody CustomerDto customerDto){
+        return new ResponseEntity<>(customerService.createCustomer(customerDto), HttpStatus.CREATED);
     }
 
     @GetMapping("{id}")
-    public ResponseEntity<Optional<Customer>> getCustomerById(@PathVariable Long id){
+    public ResponseEntity<CustomerDto> getCustomerById(@PathVariable Long id){
         return new ResponseEntity<>(customerService.getCustomerById(id), HttpStatus.OK);
     }
 
     @GetMapping
-    public ResponseEntity<List<Customer>> getAllCustomers(){
+    public ResponseEntity<List<CustomerDto>> getAllCustomers(){
         return new ResponseEntity<>(customerService.getAllCustomers(), HttpStatus.OK);
     }
 
     @PutMapping
-    public ResponseEntity<Customer> updateCustomer(@RequestBody Customer customer){
-        return new ResponseEntity<>(customerService.updateCustomer(customer), HttpStatus.OK);
+    public ResponseEntity<CustomerDto> updateCustomer(@RequestBody CustomerDto customerDto){
+        return new ResponseEntity<>(customerService.updateCustomer(customerDto), HttpStatus.OK);
     }
 
     @DeleteMapping("{id}")

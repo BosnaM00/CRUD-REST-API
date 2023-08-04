@@ -1,10 +1,13 @@
 package com.example.crudrestapi.service;
 
+import com.example.crudrestapi.dto.CustomerDto;
+import com.example.crudrestapi.mapper.CustomerMapper;
 import com.example.crudrestapi.model.Customer;
 import com.example.crudrestapi.repository.CustomerRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -22,23 +25,44 @@ public class CustomerServiceImpl implements CustomerService {
     private CustomerRepository customerRepository;
 
     @Override
-    public Customer createCustomer(Customer customer) {
-        return customerRepository.save(customer);
+    public CustomerDto createCustomer(CustomerDto customerDto) {
+
+        //Convert customerDto to customer;
+        Customer newCustomer = CustomerMapper.mapDtoToEntity(customerDto);
+
+        customerRepository.save(newCustomer);
+
+        //Convert newCustomer to customerDto
+        CustomerDto newCustomerDto = CustomerMapper.mapEntityToDto(newCustomer);
+
+        return newCustomerDto;
     }
 
     @Override
-    public Optional<Customer> getCustomerById(Long id) {
-        return customerRepository.findById(id);
+    public CustomerDto getCustomerById(Long id) {
+        Optional<Customer> customer = customerRepository.findById(id);
+        Customer newCustomer = customer.get();
+        return CustomerMapper.mapEntityToDto(newCustomer);
     }
 
     @Override
-    public List<Customer> getAllCustomers() {
-        return customerRepository.findAll();
+    public List<CustomerDto> getAllCustomers() {
+        List<Customer> customers = customerRepository.findAll();
+        List<CustomerDto> customerDtos = new ArrayList<>();
+        for(Customer customer: customers){
+            CustomerDto customerDto = CustomerMapper.mapEntityToDto(customer);
+            customerDtos.add(customerDto);
+        }
+        return customerDtos;
     }
 
     @Override
-    public Customer updateCustomer(Customer customer) {
-        return customerRepository.save(customer);
+    public CustomerDto updateCustomer(CustomerDto customerDto) {
+        Customer customer = CustomerMapper.mapDtoToEntity(customerDto);
+        customerRepository.save(customer);
+        CustomerDto newCustomerDto = CustomerMapper.mapEntityToDto(customer);
+
+        return newCustomerDto;
     }
 
     @Override
