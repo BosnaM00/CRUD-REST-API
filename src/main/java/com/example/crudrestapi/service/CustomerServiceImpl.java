@@ -5,6 +5,7 @@ import com.example.crudrestapi.mapper.CustomerMapper;
 import com.example.crudrestapi.model.Customer;
 import com.example.crudrestapi.repository.CustomerRepository;
 import lombok.AllArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -24,16 +25,21 @@ public class CustomerServiceImpl implements CustomerService {
      */
     private CustomerRepository customerRepository;
 
+    private ModelMapper modelMapper;
+
     @Override
     public CustomerDto createCustomer(CustomerDto customerDto) {
 
         //Convert customerDto to customer;
-        Customer newCustomer = CustomerMapper.mapDtoToEntity(customerDto);
+        //Customer newCustomer = CustomerMapper.mapDtoToEntity(customerDto);
+        Customer newCustomer = modelMapper.map(customerDto, Customer.class);
 
         customerRepository.save(newCustomer);
 
         //Convert newCustomer to customerDto
-        CustomerDto newCustomerDto = CustomerMapper.mapEntityToDto(newCustomer);
+        //CustomerDto newCustomerDto = CustomerMapper.mapEntityToDto(newCustomer);
+        CustomerDto newCustomerDto = modelMapper.map(newCustomer, CustomerDto.class);
+
 
         return newCustomerDto;
     }
@@ -42,7 +48,7 @@ public class CustomerServiceImpl implements CustomerService {
     public CustomerDto getCustomerById(Long id) {
         Optional<Customer> customer = customerRepository.findById(id);
         Customer newCustomer = customer.get();
-        return CustomerMapper.mapEntityToDto(newCustomer);
+        return modelMapper.map(newCustomer, CustomerDto.class);
     }
 
     @Override
@@ -50,7 +56,7 @@ public class CustomerServiceImpl implements CustomerService {
         List<Customer> customers = customerRepository.findAll();
         List<CustomerDto> customerDtos = new ArrayList<>();
         for(Customer customer: customers){
-            CustomerDto customerDto = CustomerMapper.mapEntityToDto(customer);
+            CustomerDto customerDto = modelMapper.map(customer, CustomerDto.class);
             customerDtos.add(customerDto);
         }
         return customerDtos;
@@ -58,9 +64,9 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public CustomerDto updateCustomer(CustomerDto customerDto) {
-        Customer customer = CustomerMapper.mapDtoToEntity(customerDto);
+        Customer customer = modelMapper.map(customerDto, Customer.class);
         customerRepository.save(customer);
-        CustomerDto newCustomerDto = CustomerMapper.mapEntityToDto(customer);
+        CustomerDto newCustomerDto = modelMapper.map(customer, CustomerDto.class);
 
         return newCustomerDto;
     }
